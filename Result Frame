@@ -1,0 +1,155 @@
+import java.sql.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.table.*;
+public class result extends JFrame
+{
+	Connection con;
+	ResultSet rst,rst1;
+	Statement stm,stm1;
+	String uans="";
+	String cor="";
+	String test="";
+	String right="";
+	JButton b;
+	JLabel lb;
+	Font f;
+	int count;
+	result()
+	{
+		super("Test Result");
+		setSize(600,600);
+		setResizable(false);
+		setLayout(null);
+		setLocationRelativeTo(null);
+		b=new JButton("Click here to get the score");
+		f=new Font("Papyrus",Font.BOLD,16);
+		b.setFont(f);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		try
+		{
+		Class.forName("com.mysql.jdbc.Driver");
+		con=DriverManager.getConnection("jdbc:mysql://localhost/online_quiz","root","prateek");
+		stm=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		stm1=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		System.out.println("Coonection Successful");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		count=0;
+		try
+		{
+			uans="Select * from data";
+			cor = "Select * from quiz";
+			rst= stm.executeQuery(uans);
+			rst1= stm1.executeQuery(cor);
+			rst.next();
+			rst1.next();
+			rst.first();
+			rst1.first();
+			System.out.println("check");
+			int i=1;
+			while(i!=25)
+			{
+				test=rst.getString(2);
+				right=rst1.getString(7);
+				rst.next();
+				rst1.next();
+				if(test.equals(right))
+				{
+					count++;
+				}
+						System.out.println("You Secured "+count+"   "+rst1.getInt(1));
+		i++;
+			}
+			
+		}
+		catch(Exception e)
+		{
+				e.printStackTrace();
+		}
+			panel p=new panel();
+			p.setBounds(20,20,560,560);
+			b.setBounds(180,470,240,40);
+			add(b);
+			add(p);
+			b.addActionListener(new ActionListener()
+		{
+				public void actionPerformed(ActionEvent ae)
+			{
+					if(count==0)
+			{
+				JOptionPane.showMessageDialog(null,"Sorry you Scored  "+count+"points.");
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null,"Congratulation!!! you have secured "+count+" "+"points.");
+			}
+		}});
+			setVisible(true);
+	}
+			class panel extends JPanel
+			{
+				panel()
+				{
+						String colhead[]={"Ques No.","Your Answer","Correct Answer"};
+						String qry="Select * from data";
+						String qry1="Select * from quiz";
+						int row=25;
+						Object rs[]=new Object[3];
+						try
+						{
+							rst=stm.executeQuery(qry);
+							rst1=stm1.executeQuery(qry1);
+							rst.first();
+							rst1.first();
+						}
+						catch (Exception e)
+						{
+							e.printStackTrace();
+						}
+						TableModel m1=new DefaultTableModel(colhead,row);
+						JTable table=new JTable(m1);
+						if(row==0)
+					{
+								JOptionPane.showMessageDialog(null,"NO values are present");
+					}
+					else
+					{
+							int a=table.getRowCount();
+							try
+							{
+								for(int n=1;n<=row;n++)
+								{
+										rs[0]=rst.getInt(1);
+										rs[1]=rst.getString(2);
+										rs[2]=rst1.getString(7);
+										table.getModel().setValueAt(rs[0],n-1,0);
+										table.getModel().setValueAt(rs[1],n-1,1);
+										table.getModel().setValueAt(rs[2],n-1,2);
+										rst.next();
+										rst1.next();
+								}
+							}
+							catch (Exception e)
+							{
+								e.printStackTrace();
+							}
+					}
+					setLayout(new BorderLayout());
+					table.setPreferredScrollableViewportSize(table.getPreferredSize());
+					JScrollPane jsp=new JScrollPane(table);
+		//			panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+					add(jsp,BorderLayout.CENTER);
+				}
+		
+		
+	}
+	public static void main(String args[])
+	{
+		new result();
+	}
+}
