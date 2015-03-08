@@ -1,0 +1,64 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+
+class  help extends JFrame
+{
+	String str;
+	JLabel lb;
+	JTextArea ta;
+	Container ct;
+	JButton bt[]=new JButton[2];
+	Font f=new Font("Lucida Console",Font.BOLD,16);
+	help()
+	{
+			super("Help or Instructions");
+			setSize(600,600);
+			setResizable(false);
+			setLocationRelativeTo(null);
+			setLayout(null);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			ImageIcon ic =new ImageIcon("fpre.jpg");
+			lb = new JLabel(ic);
+			setContentPane(lb);
+			ct=getContentPane();
+			ta=new JTextArea("\n\n 1. You have to select the subject/topic from the      choices available.\n\n 2. Each section has 25 question related to topic.\n\n 3. There is no time constraint.\n\n 4. One point for each correct answer.\n\n 5. You can change your answer any time.\n\n 6. At the end of the test you will get the final      result.");
+			ta.setEditable(false);
+			ta.setLineWrap(true);
+			ta.setWrapStyleWord(true);
+			ta.setBounds(20,30,560,300);
+			ta.setFont(f);
+			bt[0]=new JButton("<<");
+			bt[0].setFont(f);
+			bt[0].setBounds(110,430,100,40);
+			add(bt[0]);
+			bt[1]=new JButton("Exit");
+			bt[1].setFont(f);
+			bt[1].setBounds(350,430,100,40);
+			add(bt[1]);
+			add(ta);
+			bt[0].addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				hide();
+				new prequiz();
+			}
+		});
+		bt[1].addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				//hide();
+				System.exit(0);
+			}
+		});
+			setVisible(true);
+	}
+	public static void main(String[] args) 
+	{
+			new help();
+	}
+}
+	
