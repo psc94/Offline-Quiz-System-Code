@@ -1,0 +1,81 @@
+ import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+public class splashscreen extends JWindow
+{
+	JProgressBar jpb;
+	Container c;
+	JLabel l1,l2;
+	String s="";
+	Font f=new Font("Papyrus",Font.BOLD|Font.ITALIC,38);
+	splashscreen()
+	{
+			c=getContentPane();
+			setSize(600,365);
+			c.setLayout(new BorderLayout());
+			setLocationRelativeTo(null);
+			image();
+	}
+	public void image()
+	{
+			l2=new JLabel();
+			c.add(l2,BorderLayout.CENTER);
+			l2.setFont(f);
+			l2.setText("h");
+			ImageIcon ic =new ImageIcon("b.jpg");
+			l1=new JLabel(ic);
+			setVisible(true);
+			c.add(l1,BorderLayout.CENTER);
+			l1.setHorizontalAlignment(JLabel.CENTER);
+			progress();
+	}
+	public void progress()
+	{
+			String st="             Offline Test System           ";
+			jpb=new JProgressBar(0,46);
+			jpb.setOpaque(true);
+			c.add(jpb,BorderLayout.SOUTH);
+			setVisible(true);
+			for(int i=0;i<=40;i++)
+		{
+					jpb.setValue(i);
+					if(i<45)
+			{
+							try
+							{
+								Thread.sleep(100);
+								s=s+st.charAt(i);
+								l2.setText(s);
+								l2.setHorizontalAlignment(JLabel.CENTER);
+								setVisible(true);
+							}
+							catch (Exception e)
+							{
+									e.printStackTrace();
+							}
+			}
+			else
+			{
+					try
+					{
+						Thread.sleep(500);
+						s=s+st.charAt(i);
+						l2.setText(s);
+						l2.setHorizontalAlignment(JLabel.CENTER);
+						setVisible(true);
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+			}
+		}
+		dispose();
+		new prequiz();
+	}
+	public static void main(String[] args) throws Exception
+	{
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		new splashscreen();
+	}
+}
