@@ -1,0 +1,95 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+public class prequiz extends JFrame
+{
+		Container c;
+		Connection con;
+		ResultSet rst;
+		Container ct;
+		Statement stm;
+		JButton bt1;
+		JLabel lb=new JLabel("WELCOME TO OFFLINE TEST SYSTEM");
+		JTextArea ta;
+		JLabel lb1;
+		Font f=new Font("Papyrus",Font.BOLD,20);
+	prequiz()
+	{
+		super("Start Test");
+		setSize(630,630);
+		setResizable(false);
+		setLocationRelativeTo(null);
+		setLayout(null);
+		ta=new JTextArea("It is a good source of interactivities among students and between the teacher and students. It is done in order to improve student’s knowledge and learning motivation. As their one of tools offline quiz is quite effective.In order to solve these questions we have developed a data base system which can create quiz competitively and collaboratively by students for the purpose of reducing the load required for a texcher and promoting interactions among students and between the teacher and students.");
+		ta.setEditable(false);
+		ta.setLineWrap(true);
+		ta.setWrapStyleWord(true);
+		ta.setFont(f);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		lb.setHorizontalAlignment(JLabel.CENTER);
+		JButton bt=new JButton("Start Quiz");
+		bt1=new JButton("Help");
+		ImageIcon ic =new ImageIcon("pre.jpg");
+		bt.setBounds(320,480,150,50);
+		bt1.setBounds(150,480,140,50);
+		ta.setBounds(30,100,550,320);
+		lb.setBounds(30,30,550,60);
+		lb.setFont(f);
+		bt.setFont(f);
+		bt1.setFont(f);
+		lb1 = new JLabel(ic);
+		setContentPane(lb1);
+		ct=getContentPane();
+		add(lb);
+		add(bt1);
+		add(ta);
+		//Database Connectivity
+		bt1.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				hide();
+				new help();
+			}
+		});
+		try
+		{
+		Class.forName("com.mysql.jdbc.Driver");
+		con=DriverManager.getConnection("jdbc:mysql://localhost/online_quiz","root","prateek");
+		stm=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		System.out.println("Connection Successful");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}		
+		System.out.print("ok");
+		add(bt);
+		bt.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{	
+				hide();
+		try
+		{	
+			String qry="Select * from quiz";
+			rst=stm.executeQuery(qry);
+			System.out.print("ok");
+			rst.first();
+			new quiz(rst,"Submit");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		}
+		});
+				setVisible(true);
+	
+	}
+	public static void main(String args[])
+	{
+			new prequiz();
+	}
+}
